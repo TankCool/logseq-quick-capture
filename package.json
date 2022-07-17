@@ -1,0 +1,31 @@
+{
+  "name": "logseq-quick-capture",
+  "version": "0.0.1",
+  "author": "TankCool",
+  "main": "dist/index.html",
+  "description": "Quick capture you ideas to your journal or specify page.",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "format": "prettier --write **/*.{js,vue}"
+  },
+  "logseq": {
+    "icon": "./icon.png",
+    "id": "logseq-quick-capture"
+  },
+  "dependencies": {
+    "@logseq/libs": "^0.0.6",
+    "moment": "^2.29.4",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "prettier": "^2.6.2",
+    "vite": "^2.9.9",
+    "vite-plugin-vue2": "^1.9.3",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "license": "MIT",
+  "browserslist": [
+    "chrome 80"
+  ]
+}
