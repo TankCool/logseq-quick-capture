@@ -1,6 +1,6 @@
 # logseq-quick-capture
 
-Quick capture you ideas to your journal or specify page.
+Quick capture your ideas to journal or specify page.
 
 ## Feature
 
