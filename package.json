@@ -1,6 +1,6 @@
 {
   "name": "logseq-quick-capture",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "TankCool",
   "main": "dist/index.html",
   "description": "Quick capture you ideas to your journal or specify page.",
@@ -19,6 +19,12 @@
     "vue": "^2.6.14"
   },
   "devDependencies": {
+    "eslint": "^8.20.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.4",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^9.2.0",
     "prettier": "^2.6.2",
     "vite": "^2.9.9",
     "vite-plugin-vue2": "^1.9.3",

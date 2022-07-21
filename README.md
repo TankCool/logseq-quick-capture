@@ -1,5 +1,7 @@
 # logseq-quick-capture
 
+![GitHub all releases](https://img.shields.io/github/downloads/tankcool/logseq-quick-capture/total)
+
 Quick capture your ideas to journal or specify page.
 
 ## Feature
