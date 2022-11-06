@@ -136,7 +136,6 @@ export default {
                      [?p :block/journal-day ?d]
                      [(= ?d ?start)]]
                      `, ':today', '"' + parentBlock + '"')
-        console.log(block)
         if (!block) {
           block = [await this.insertBlockAtEndOfPage(parentBlock)]
         }
@@ -154,11 +153,14 @@ export default {
     },
     async submitContent () {
       // eslint-disable-next-line no-undef
-      const parentBlock = logseq.settings.defaultBlock
-      if (parentBlock) {
-        await this.insertBlockBelowParentBlock(parentBlock, this.content)
+      const {
+        defaultBlock,
+        prefix
+      } = logseq.settings
+      if (defaultBlock) {
+        await this.insertBlockBelowParentBlock(defaultBlock, prefix + this.content)
       } else {
-        await this.insertBlockAtEndOfPage(this.content)
+        await this.insertBlockAtEndOfPage(prefix + this.content)
       }
       setTimeout(() => {
         this.$refs.contentRef.blur()
@@ -222,7 +224,7 @@ body,
   line-height: 1rem;
   padding: .5rem .75rem;
   transition-duration: .15s;
-  transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 </style>
