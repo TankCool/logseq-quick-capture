@@ -198,6 +198,7 @@ body,
   right: 0;
   top: 25%;
   margin: 0 auto;
+  background: white;
 }
 
 .modal-wrapper textarea {
@@ -208,25 +209,6 @@ body,
   height: 160px;
 }
 
-.btn-close {
-  position: absolute;
-  right: 80px;
-  bottom: 15px;
-  color: #f7f7f7;
-  width: 60px;
-  height: 30px;
-  border-radius: 5px;
-}
-
-.btn-submit {
-  position: absolute;
-  right: 10px;
-  bottom: 15px;
-  color: #f7f7f7;
-  width: 60px;
-  height: 30px;
-  border-radius: 5px;
-}
 .ui__button {
   --tw-text-opacity: 1;
   align-items: center;
