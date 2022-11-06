@@ -164,11 +164,13 @@ export default {
       } else {
         await this.insertBlockAtEndOfPage(prependContent)
       }
-      setTimeout(() => {
+      setTimeout(async () => {
         this.$refs.contentRef.blur()
         this.content = ''
         // eslint-disable-next-line no-undef
-        logseq.hideMainUI()
+        await logseq.Editor.exitEditingMode(true)
+        // eslint-disable-next-line no-undef
+        await logseq.hideMainUI(false)
       }, 200)
     },
     getCurrentTimeStamp () {
