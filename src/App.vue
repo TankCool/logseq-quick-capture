@@ -153,11 +153,7 @@ export default {
     },
     async submitContent () {
       // eslint-disable-next-line no-undef
-      const {
-        defaultBlock,
-        prefix,
-        timeStamp
-      } = logseq.settings
+      const { defaultBlock, prefix, timeStamp } = logseq.settings
       const prependContent = this.getPrependContent(timeStamp, prefix) + this.content
       if (defaultBlock) {
         await this.insertBlockBelowParentBlock(defaultBlock, prependContent)
