@@ -13,9 +13,15 @@ export const callSettings = () => {
       key: 'defaultBlock',
       type: 'string',
       default: '',
-      description:
-        'The default block on the Daily Notes Page where the new items it put below.',
+      description: 'The default block on the Daily Notes Page where the new items it put below.',
       title: 'Default Block'
+    },
+    {
+      key: 'prefix',
+      type: 'string',
+      default: '',
+      description: 'Adds an automatic prefix to notes',
+      title: 'Prefix'
     }
   ]
   // eslint-disable-next-line no-undef
