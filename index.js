@@ -7,9 +7,29 @@ async function showQuickCapture () {
   logseq.showMainUI()
 }
 
+export const callSettings = () => {
+  const settings = [
+    {
+      key: 'defaultBlock',
+      type: 'string',
+      default: '',
+      description:
+        'The default block on the Daily Notes Page where the new items it put below.',
+      title: 'Default Block'
+    }
+  ]
+  // eslint-disable-next-line no-undef
+  logseq.useSettingsSchema(settings)
+}
+
 function main () {
+  callSettings()
+
   // eslint-disable-next-line no-unused-vars
-  const app = new Vue({ el: '#app', render: (h) => h(App) })
+  const app = new Vue({
+    el: '#app',
+    render: (h) => h(App)
+  })
 
   // eslint-disable-next-line no-undef
   logseq.provideModel({
@@ -44,5 +64,6 @@ function main () {
     }
   )
 }
+
 // eslint-disable-next-line no-undef
 logseq.ready(main).catch(console.error)

@@ -8,17 +8,25 @@
         ref="contentRef"
         @click.stop=""
       ></textarea>
-      <button class="w-6 h-6 btn-close bg-red-600" @click.stop="cancelCapture">
-        Cancel
-      </button>
-      <button class="w-12 h-12 btn-submit bg-green-600"  @click.stop="submitContent">
-        OK
-      </button>
+      <div class="flex flex-row gap-2 p-2 justify-end">
+        <button
+          class="ui__button bg-red-600 hover:bg-red-700 focus:border-red-700 active:bg-red-700 text-center text-sm p-1"
+          @click.stop="cancelCapture"
+        >
+          Cancel
+        </button>
+        <button
+          class="ui__button bg-green-600 hover:bg-green-700 focus:border-green-700 active:bg-green-700 text-center text-sm p-1"
+          @click.stop="submitContent"
+        >
+          OK
+        </button>
+      </div>
     </modal>
   </div>
 </template>
 <script>
-import moment from 'moment'
+
 const darkBgColor = '#08404f'
 const lightBgColor = '#f7f7f7'
 export default {
@@ -54,11 +62,11 @@ export default {
       // console.log("ui:visible:changed")
       this.visible = visible
       visible &&
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.$refs.contentRef.focus()
-          }, 200)
-        })
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$refs.contentRef.focus()
+        }, 200)
+      })
     })
     // eslint-disable-next-line no-undef
     logseq.App.onThemeModeChanged(({ mode }) => {
@@ -92,56 +100,77 @@ export default {
       // eslint-disable-next-line no-undef
       logseq.hideMainUI()
     },
-    async submitContent () {
-      // console.log("submitContent")
-      const journalDay = moment().format('YYYYMMDD')
-      let ret
+    insertBlockAtEndOfPage: async function (content) {
       try {
         // eslint-disable-next-line no-undef
-        ret = await logseq.DB.datascriptQuery(`
-          [:find (pull ?p [*])
-            :where
-            [?b :block/page ?p]
-            [?p :block/journal? true]
-            [?p :block/journal-day ?d]
-            [(= ?d ${journalDay})]]
-        `)
+        const [page] = await logseq.DB.datascriptQuery(`
+                     [:find (pull ?p [*])
+                     :in $ ?start
+                     :where
+                     [?b :block/page ?p]
+                     [?p :block/journal? true]
+                     [?p :block/journal-day ?d]
+                     [(= ?d ?start)]]
+                     `, ':today')
+        if (page && page.length > 0) {
+          // eslint-disable-next-line no-undef
+          return await logseq.Editor.appendBlockInPage(
+            page[0].uuid,
+            content
+          )
+        }
       } catch (e) {
         console.error(e)
       }
-      ret = (ret || []).flat()
-      if (ret && ret.length > 0) {
-        const journalName = ret[0].name
+    },
+    insertBlockBelowParentBlock: async function (parentBlock, content) {
+      try {
         // eslint-disable-next-line no-undef
-        const page = await logseq.Editor.getPage(journalName)
-        if (page) {
-          if (this.content) {
-            this.$refs.contentRef.blur()
-            // eslint-disable-next-line no-undef
-            const append = await logseq.Editor.appendBlockInPage(
-              page.uuid,
-              this.content
-            )
-            // console.log(append)
-            if (append?.content === this.content) {
-              // eslint-disable-next-line no-undef
-              logseq.UI.showMsg('Quick Capture Success.')
-              setTimeout(() => {
-                this.content = ''
-                // eslint-disable-next-line no-undef
-                logseq.hideMainUI()
-              }, 200)
-            }
-          } else {
-            // eslint-disable-next-line no-undef
-            logseq.UI.showMsg('Nothing to capture.')
-          }
+        let [block] = await logseq.DB.datascriptQuery(`
+                     [:find (pull ?b [*])
+                     :in $ ?start ?parentBlock
+                     :where
+                     [?b :block/page ?p]
+                     [?b :block/content ?parentBlock]
+                     [?p :block/journal? true]
+                     [?p :block/journal-day ?d]
+                     [(= ?d ?start)]]
+                     `, ':today', '"' + parentBlock + '"')
+        console.log(block)
+        if (!block) {
+          block = [await this.insertBlockAtEndOfPage(parentBlock)]
         }
+        if (block && block.length > 0) {
+          this.$refs.contentRef.blur()
+          // eslint-disable-next-line no-undef
+          return await logseq.Editor.insertBlock(
+            block[0].uuid,
+            content
+          )
+        }
+      } catch (e) {
+        console.error(e)
       }
+    },
+    async submitContent () {
+      // eslint-disable-next-line no-undef
+      const parentBlock = logseq.settings.defaultBlock
+      if (parentBlock) {
+        await this.insertBlockBelowParentBlock(parentBlock, this.content)
+      } else {
+        await this.insertBlockAtEndOfPage(this.content)
+      }
+      setTimeout(() => {
+        this.$refs.contentRef.blur()
+        this.content = ''
+        // eslint-disable-next-line no-undef
+        logseq.hideMainUI()
+      }, 200)
     }
   }
 }
 </script>
+
 <style>
 html,
 body {
@@ -158,8 +187,10 @@ body,
   height: 100%;
   margin: 0 auto;
 }
+
 .modal-wrapper {
   border-radius: 6px;
+  border: 1px solid #aaa;
   position: absolute;
   max-width: 600px;
   min-width: 400px;
@@ -168,6 +199,7 @@ body,
   top: 25%;
   margin: 0 auto;
 }
+
 .modal-wrapper textarea {
   resize: none;
   padding: 10px;
@@ -175,6 +207,7 @@ body,
   border-radius: 6px;
   height: 160px;
 }
+
 .btn-close {
   position: absolute;
   right: 80px;
@@ -184,6 +217,7 @@ body,
   height: 30px;
   border-radius: 5px;
 }
+
 .btn-submit {
   position: absolute;
   right: 10px;
@@ -192,5 +226,21 @@ body,
   width: 60px;
   height: 30px;
   border-radius: 5px;
+}
+.ui__button {
+  --tw-text-opacity: 1;
+  align-items: center;
+  border-color: transparent;
+  border-radius: .375rem;
+  border-width: 1px;
+  color: rgb(255 255 255/var(--tw-text-opacity));
+  display: flex;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1rem;
+  padding: .5rem .75rem;
+  transition-duration: .15s;
+  transition-property: color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
 }
 </style>
