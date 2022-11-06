@@ -155,12 +155,14 @@ export default {
       // eslint-disable-next-line no-undef
       const {
         defaultBlock,
-        prefix
+        prefix,
+        timeStamp
       } = logseq.settings
+      const prependContent = this.getPrependContent(timeStamp, prefix) + this.content
       if (defaultBlock) {
-        await this.insertBlockBelowParentBlock(defaultBlock, prefix + this.content)
+        await this.insertBlockBelowParentBlock(defaultBlock, prependContent)
       } else {
-        await this.insertBlockAtEndOfPage(prefix + this.content)
+        await this.insertBlockAtEndOfPage(prependContent)
       }
       setTimeout(() => {
         this.$refs.contentRef.blur()
@@ -168,6 +170,20 @@ export default {
         // eslint-disable-next-line no-undef
         logseq.hideMainUI()
       }, 200)
+    },
+    getCurrentTimeStamp () {
+      const now = new Date()
+      const hours = now.getHours()
+      const mins = now.getMinutes()
+      return (hours < 10 ? '0' + hours : hours) + ':' + (mins < 10 ? '0' + mins : mins)
+    },
+    isWorkflowKeywords (prefix) {
+      return ['todo', 'done', 'doing', 'later', 'now'].indexOf(prefix.trim().toLowerCase()) > -1
+    },
+    getPrependContent (timeStamp, prefix) {
+      const isKeyword = this.isWorkflowKeywords(prefix)
+      const stamp = timeStamp ? this.getCurrentTimeStamp() : ''
+      return isKeyword ? prefix + stamp + ' ' : stamp + ' ' + prefix
     }
   }
 }

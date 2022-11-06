@@ -22,6 +22,13 @@ export const callSettings = () => {
       default: '',
       description: 'Adds an automatic prefix to notes',
       title: 'Prefix'
+    },
+    {
+      key: 'timeStamp',
+      type: 'boolean',
+      default: false,
+      description: 'Prepend a time stamp to the entry entered',
+      title: 'Prepend a time stamp'
     }
   ]
   // eslint-disable-next-line no-undef

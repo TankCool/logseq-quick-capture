@@ -1,6 +1,6 @@
 {
   "name": "logseq-quick-capture",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "TankCool",
   "main": "dist/index.html",
   "description": "Quick capture you ideas to your journal or specify page.",
