@@ -14,7 +14,7 @@
     "id": "logseq-quick-capture"
   },
   "dependencies": {
-    "@logseq/libs": "^0.0.6",
+    "@logseq/libs": "^0.0.14",
     "moment": "^2.29.4",
     "vue": "^2.6.14"
   },
