@@ -1,12 +1,12 @@
-import { defineConfig } from "vite";
-import { createVuePlugin } from "vite-plugin-vue2";
+import { defineConfig } from 'vite'
+import { createVuePlugin } from 'vite-plugin-vue2'
 
 const config = defineConfig({
-  base: "",
+  base: '',
   build: {
-    minify: true,
+    minify: true
   },
-  plugins: [createVuePlugin({})],
-});
+  plugins: [createVuePlugin({})]
+})
 
-export default config;
+export default config

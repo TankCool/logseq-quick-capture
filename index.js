@@ -1,6 +1,7 @@
 import '@logseq/libs'
 import Vue from 'vue'
 import App from './src/App.vue'
+import 'tailwindcss/tailwind.css'
 
 async function showQuickCapture () {
   // eslint-disable-next-line no-undef
